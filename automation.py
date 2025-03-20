@@ -66,6 +66,7 @@ def tratar_preco(preco_valor):
     Se for uma string, remove 'R$', espaços e formata a vírgula para ponto.
     Se não puder converter, retorna None.
     """
+    print(preco_valor)
     if preco_valor is None:
         return None
 
