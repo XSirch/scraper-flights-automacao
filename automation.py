@@ -4,7 +4,7 @@ import asyncio
 import datetime
 import math
 from pesquisa_voos import search_flights
-from db_postgres import init_db, salva_resultados_em_db
+from db_pg import init_db, salva_resultados_em_db
 
 def carregar_parametros(json_file="params_flights.json"):
     """
