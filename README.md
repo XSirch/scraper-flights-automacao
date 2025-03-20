@@ -1,6 +1,3 @@
-Segue abaixo o conteúdo completo do arquivo README.md que inclui todo o conteúdo da resposta:
-
-```markdown
 # Flight Search Automation
 
 ## Visão Geral
