@@ -16,6 +16,13 @@ def get_connection():
     HOST = os.getenv("HOST")
     PORT = os.getenv("PORT")
     DBNAME = os.getenv("DBNAME")
+    # Para debug, podemos imprimir (ou registrar) se as variáveis estão sendo capturadas (não imprima senhas em produção!)
+    print("Tentando conectar com:")
+    print("USER:", USER)
+    print("HOST:", HOST)
+    print("PORT:", PORT)
+    print("DBNAME:", DBNAME)
+    
     try:
         conn = psycopg2.connect(
         user=USER,
