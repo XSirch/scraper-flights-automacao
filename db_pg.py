@@ -29,7 +29,7 @@ def get_connection():
         password=PASSWORD,
         host=HOST,
         port=PORT,
-        dbname=DBNAME
+        dbname=DBNAME,
         sslmode='require'
     )
         print("Connection successful!")
