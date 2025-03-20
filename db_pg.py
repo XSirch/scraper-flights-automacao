@@ -34,8 +34,9 @@ def get_connection():
     )
         print("Connection successful!")
         return conn
-    except:
-        print("Connection failed!")
+    except Exception as e:
+        print("Connection failed!", e)
+        raise e
 
 '''    # Create a cursor to execute SQL queries
     db_url = os.getenv('DATABASE_URL')
