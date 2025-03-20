@@ -30,6 +30,7 @@ def get_connection():
         host=HOST,
         port=PORT,
         dbname=DBNAME
+        sslmode='require'
     )
         print("Connection successful!")
         return conn
