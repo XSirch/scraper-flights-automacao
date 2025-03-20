@@ -81,11 +81,11 @@ def tratar_preco(preco_valor):
         return None
 
     # Remove "R$" e espaços
-    preco_limpo = preco_str.replace("R$", "").strip()
+    preco_limpo = preco_str.replace("$", "").strip()
     # Remove separadores de milhar e substitui vírgula por ponto
     preco_limpo = preco_limpo.replace(".", "").replace(",", ".")
     try:
-        return float(preco_limpo)
+        return int(preco_limpo)
     except ValueError:
         print("Erro de tratamento de valor")
         return None
