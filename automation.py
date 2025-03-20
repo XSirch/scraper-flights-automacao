@@ -58,25 +58,37 @@ def haversine(coord1, coord2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return R * c
 
-def tratar_preco(preco_str):
+
+def tratar_preco(preco_valor):
     """
-    Remove o símbolo 'R$', espaços, separador de milhares e substitui a vírgula por ponto.
-    Em seguida, converte para float. Se o preço não for numérico, retorna None.
+    Converte o valor do preço para um número (float).
+    Se o valor já for numérico, retorna-o diretamente.
+    Se for uma string, remove 'R$', espaços e formata a vírgula para ponto.
+    Se não puder converter, retorna None.
     """
-    if not preco_str:
+    if preco_valor is None:
         return None
-    # Se o preço estiver indisponível, retorna None
+
+    # Se já for um número, retorna-o
+    if isinstance(preco_valor, (int, float)):
+        return preco_valor
+
+    # Converte para string, caso não seja
+    preco_str = str(preco_valor)
     if "unavailable" in preco_str.lower():
+        print("indisponivel")
         return None
-    # Remove o 'R$' e espaços
+
+    # Remove "R$" e espaços
     preco_limpo = preco_str.replace("R$", "").strip()
-    # Remove separadores de milhar e substitua vírgula por ponto
+    # Remove separadores de milhar e substitui vírgula por ponto
     preco_limpo = preco_limpo.replace(".", "").replace(",", ".")
     try:
-        return int(preco_limpo)
+        return float(preco_limpo)
     except ValueError:
+        print("Erro de tratamento de valor")
         return None
-    
+
 def buscar_voo(origem, destino, data_str, regioes, airport_coords):
     """
     Realiza a busca de voos para a data informada e retorna o voo mais barato.
