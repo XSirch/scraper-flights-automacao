@@ -10,11 +10,11 @@ jobs:
   run-automation:
     runs-on: ubuntu-latest
     env:
-      user: ${{ secrets.USER }}
-      password: ${{ secrets.PASSWORD }}
-      host: ${{ secrets.HOST }}
-      port: ${{ secrets.PORT }}
-      dbname: ${{ secrets.DBNAME }}
+      USER: ${{ secrets.USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
+      PORT: ${{ secrets.PORT }}
+      DBNAME: ${{ secrets.DBNAME }}
 
     steps:
       - name: Checkout do código
