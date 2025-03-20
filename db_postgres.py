@@ -7,7 +7,10 @@ def get_connection():
     """
     Obtém a conexão com o banco de dados PostgreSQL usando a variável de ambiente DATABASE_URL.
     """
-    load_dotenv()
+    # Se não estiver no GitHub Actions, tente carregar as variáveis do .env
+    if os.getenv("GITHUB_ACTIONS") != "true":
+        from dotenv import load_dotenv
+        load_dotenv()
     USER = os.getenv("USER")
     PASSWORD = os.getenv("PASSWORD")
     HOST = os.getenv("HOST")
