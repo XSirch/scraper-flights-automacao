@@ -8,11 +8,11 @@ def get_connection():
     Obtém a conexão com o banco de dados PostgreSQL usando a variável de ambiente DATABASE_URL.
     """
     load_dotenv()
-    USER = os.getenv("user")
-    PASSWORD = os.getenv("password")
-    HOST = os.getenv("host")
-    PORT = os.getenv("port")
-    DBNAME = os.getenv("dbname")
+    USER = os.getenv("USER")
+    PASSWORD = os.getenv("PASSWORD")
+    HOST = os.getenv("HOST")
+    PORT = os.getenv("PORT")
+    DBNAME = os.getenv("DBNAME")
     try:
         conn = psycopg2.connect(
         user=USER,
