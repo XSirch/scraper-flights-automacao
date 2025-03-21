@@ -9,8 +9,8 @@ from playwright.async_api import async_playwright
 async def scrape_day(page, origin, destination, flight_date):
     print(f"[DEBUG] Iniciando o scraping para a data: {flight_date}")
     url = (
-        "https://www.google.com/travel/flights?hl=pt-BR&gl=BR&trip=oneway&q="
-        f"Flights%20to%20{destination}%20from%20{origin}%20on%20{flight_date}"
+        "https://www.google.com/travel/flights?hl=pt-BR&gl=BR&curr=BRL&q="
+        f"Flights%20to%20{destination}%20from%20{origin}%20on%20{flight_date}%20oneway"
     )
     print(f"[INFO] Acessando: {url}")
     print("[DEBUG] Iniciando o carregamento da página...")
@@ -21,7 +21,7 @@ async def scrape_day(page, origin, destination, flight_date):
     selector = "li.pIav2d"
     print("[DEBUG] Buscando pelo seletor dos cartões de voo...")
     try:
-        await page.wait_for_selector(selector, timeout=5000)
+        await page.wait_for_selector(selector, timeout=3000)
     except:
         print(f"[WARN] Não encontrei nenhum voo na data {flight_date}.")
         return None
@@ -43,6 +43,9 @@ async def scrape_day(page, origin, destination, flight_date):
         try:
             departure_span = page.locator("span[aria-label*='Horário de partida']").first
             departure_time = (await departure_span.inner_text()) if departure_span else "N/A"
+
+            arrival_span = page.locator("span[aria-label*='Horário de chegada']").first
+            arrival_time = (await arrival_span.inner_text()) if arrival_span else "N/A"
 
             price_el = await card.query_selector("div.YMlIz FpEdX jLMuyc span")
             if not price_el:
@@ -72,6 +75,7 @@ async def scrape_day(page, origin, destination, flight_date):
                     "data_voo": flight_date,
                     "dia_semana": "",
                     "horario_partida": departure_time,
+                    "horario_chegada": arrival_time,
                     "companhia": airline,
                     "preco": cheapest_price,
                 }
@@ -93,7 +97,8 @@ async def scrape_range(origin, destination, days_ahead=60):
 
         for i in range(days_ahead + 1):
             target_date = today + timedelta(days=i)
-            flight_date_str = target_date.strftime("%Y-%m-%d")
+            #flight_date_str = target_date.strftime("%Y-%m-%d")
+            flight_date_str = "2025-05-22"
             print(f"[DEBUG] Processando a data: {flight_date_str}")
 
             flight_info = await scrape_day(page, origin, destination, flight_date_str)
@@ -115,7 +120,7 @@ async def scrape_range(origin, destination, days_ahead=60):
 async def main():
     origin = "CGH"
     destination = "SDU"
-    days_ahead = 1
+    days_ahead = 0
 
     print(f"[INFO] Iniciando coleta de {origin} para {destination} em até {days_ahead} dias...")
 

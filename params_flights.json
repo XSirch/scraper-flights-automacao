@@ -7,6 +7,7 @@
     {"origem": "SSA", "destino": "SDU", "data": "2025-05-22"},
     {"origem": "MAO", "destino": "GIG", "data": "2025-05-23"},
     {"origem": "FOR", "destino": "GIG", "data": "2025-05-23"},
+    {"origem": "PMW", "destino": "GIG", "data": "2025-05-23"},
     {"origem": "BEL", "destino": "GIG", "data": "2025-05-24"},
     {"origem": "NAT", "destino": "GIG", "data": "2025-05-24"},
     {"origem": "VCP", "destino": "GIG", "data": "2025-05-24"},

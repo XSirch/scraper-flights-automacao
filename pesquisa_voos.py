@@ -1,4 +1,4 @@
-from fast_flights import FlightData, Passengers, Result, get_flights
+from fast_flights import FlightData, Passengers, Result, get_flights_from_filter, get_flights, TFSData, create_filter
 import tkinter as tk
 from tkinter import ttk, messagebox
 
@@ -15,7 +15,7 @@ def search_flights(date: str, origem: str, destino: str) -> Result:
         Result: Resultado da busca de voos.
     """
     
-    result: Result = get_flights(
+    '''    result: Result = get_flights(
         flight_data=[
             FlightData(date=date, from_airport=origem, to_airport=destino)
         ],
@@ -23,8 +23,29 @@ def search_flights(date: str, origem: str, destino: str) -> Result:
         seat="economy",
         passengers=Passengers(adults=1, children=0, infants_in_seat=0, infants_on_lap=0),
         fetch_mode="fallback",
+    )'''
+    filter: TFSData = create_filter(
+        flight_data=[
+            FlightData(
+                date=date,
+                from_airport=origem,
+                to_airport=destino,
+            )
+        ],
+        trip="one-way",
+        passengers=Passengers(adults=1, children=0, infants_in_seat=0, infants_on_lap=0),
+        seat="economy",
+        max_stops=2,
     )
+    filter.as_b64()  # Base64-encoded (bytes)
+    filter.to_string()  # Serialize to string
+    result = get_flights_from_filter(filter)
+    
+
     return result
+
+
+
 
 def create_gui():
     root = tk.Tk()

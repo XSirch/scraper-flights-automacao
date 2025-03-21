@@ -54,14 +54,13 @@ def init_db():
     cur = conn.cursor()
     print("Verificando/criando a tabela 'resultados'...")
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS resultados (
+        CREATE TABLE IF NOT EXISTS resultados2 (
             id SERIAL PRIMARY KEY,
             TRECHO TEXT,
             data_voo TEXT,
-            melhor_voo TEXT,
             hora_partida TEXT,
             hora_chegada TEXT,
-            preco REAL,
+            preco INTEGER,
             companhia TEXT,
             dia_semana_voo TEXT,
             data_busca TEXT,
@@ -88,15 +87,14 @@ def salva_resultados_em_db(resultados):
         print("Verificando duplicidade para o registro:")
         print(r)
         cur.execute("""
-            SELECT COUNT(*) FROM resultados 
-            WHERE TRECHO = %s AND data_voo = %s AND melhor_voo = %s AND hora_partida = %s AND hora_chegada = %s 
+            SELECT COUNT(*) FROM resultados2 
+            WHERE TRECHO = %s AND data_voo = %s AND hora_partida = %s AND hora_chegada = %s 
                   AND preco = %s AND companhia = %s AND dia_semana_voo = %s 
                   AND data_busca = %s AND horario_busca = %s AND dia_semana_busca = %s 
                   AND regiao_origem = %s AND distancia_km = %s
         """, (
             r.get("TRECHO"),
             r.get("data_voo"), 
-            r.get("melhor_voo"), 
             r.get("hora_partida"), 
             r.get("hora_chegada"), 
             r.get("preco"),
@@ -114,14 +112,13 @@ def salva_resultados_em_db(resultados):
             print("Inserindo registro:")
             print(r)
             cur.execute("""
-                INSERT INTO resultados 
-                (TRECHO, data_voo, melhor_voo, hora_partida, hora_chegada, preco, companhia, dia_semana_voo, 
+                INSERT INTO resultados2
+                (TRECHO, data_voo, hora_partida, hora_chegada, preco, companhia, dia_semana_voo, 
                  data_busca, horario_busca, dia_semana_busca, regiao_origem, distancia_km)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 r.get("TRECHO"),
-                r.get("data_voo"), 
-                r.get("melhor_voo"), 
+                r.get("data_voo"),  
                 r.get("hora_partida"), 
                 r.get("hora_chegada"), 
                 r.get("preco"),
@@ -147,7 +144,7 @@ def export_db_to_csv(csv_filename):
     """
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM resultados")
+    cur.execute("SELECT * FROM resultados2")
     rows = cur.fetchall()
     headers = [desc[0] for desc in cur.description]
     cur.close()
@@ -166,7 +163,7 @@ def get_all_results():
     """
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM resultados")
+    cur.execute("SELECT * FROM resultados2")
     rows = cur.fetchall()
     headers = [desc[0] for desc in cur.description]
     cur.close()

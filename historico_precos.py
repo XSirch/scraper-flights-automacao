@@ -15,8 +15,8 @@ async def scrape(origin: str, destination: str, flight_date: str, output_file: s
     """
     # Monta a URL da busca
     url = (
-        "https://www.google.com/travel/flights?hl=pt-BR&gl=BR&trip=oneway&q="
-        f"Flights%20to%20{destination}%20from%20{origin}%20on%20{flight_date}"
+        "https://www.google.com/travel/flights?hl=pt-BR&gl=BR&curr=BRL&q="
+        f"Flights%20to%20{destination}%20from%20{origin}%20on%20{flight_date}%20oneway"
     )
     print(f"[DEBUG] URL construída: {url}")
 
