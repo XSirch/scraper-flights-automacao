@@ -5,6 +5,7 @@ import datetime
 import math
 from pesquisa_voos import search_flights
 from db_pg import init_db, salva_resultados_em_db
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def carregar_parametros(json_file="params_flights.json"):
     """
@@ -63,7 +64,7 @@ def tratar_preco(preco_valor):
     """
     Converte o valor do preço para um número (float).
     Se o valor já for numérico, retorna-o diretamente.
-    Se for uma string, remove 'R$', espaços e formata a vírgula para ponto.
+    Se for uma string, remove '$', espaços e formata a vírgula para ponto.
     Se não puder converter, retorna None.
     """
     print(preco_valor)
@@ -154,21 +155,32 @@ def tarefa_automatizada():
     regioes = carregar_regioes()
     airport_coords = carregar_airport_coords()
     todos_resultados = []
+    resultados_ordenados = {}
 
-    for param in parametros:
-        origem = param.get("origem")
-        destino = param.get("destino")
-        data_str = param.get("data")
-        print(f"Executando busca para {origem} -> {destino} na data {data_str}")
-        resultado = buscar_voo(origem, destino, data_str, regioes, airport_coords)
-        if resultado:
-            todos_resultados.append(resultado)
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        future_to_param = {
+            executor.submit(buscar_voo, param.get("origem"), param.get("destino"), param.get("data"), regioes, airport_coords): i
+            for i, param in enumerate(parametros)
+        }
+
+        for future in as_completed(future_to_param):
+            index = future_to_param[future]  # Obtém a posição original
+            try:
+                resultado = future.result()
+                if resultado:
+                    resultados_ordenados[index] = resultado
+            except Exception as e:
+                print(f"[ERROR] Falha ao buscar voo: {e}")
+
+    # Ordena os resultados para garantir que sejam salvos na ordem original
+    for i in sorted(resultados_ordenados.keys()):
+        todos_resultados.append(resultados_ordenados[i])
 
     if todos_resultados:
         salva_resultados_em_db(todos_resultados)
-        print(f"Total de {len(todos_resultados)} registros salvos no banco de dados.")
+        print(f"[INFO] Total de {len(todos_resultados)} registros salvos no banco de dados.")
     else:
-        print("Nenhum resultado obtido para salvar.")
+        print("[WARN] Nenhum resultado obtido para salvar.")
 
 if __name__ == "__main__":
     if sys.platform.startswith("win"):
